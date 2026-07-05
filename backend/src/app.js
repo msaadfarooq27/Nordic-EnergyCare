@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 
 import healthRoutes from './routes/health.routes.js';
+import customerRoutes from './routes/customer.routes.js';
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/health', healthRoutes);
+app.use('/api/customer', customerRoutes);
 
 app.use((req, res) => {
     res.status(404).json({
