@@ -6,12 +6,12 @@ const router = Router();
 
 router.post("/profile", requireAuth, async (req, res) => {
     try {
-        const { city, contractType } = req.body;
+        const { city } = req.body;
 
-        if(!city || !contractType){
+        if(!city){
             return res.status(400).json({
                 success: false,
-                message: 'City and Contract-type is required'
+                message: 'City is required'
             });
         }
 
@@ -30,8 +30,6 @@ router.post("/profile", requireAuth, async (req, res) => {
             data: {
                 customerId,
                 city,
-                contractType,
-                latestBillStatus: 'Pending',
                 userId: req.user.userId
             },
         });
