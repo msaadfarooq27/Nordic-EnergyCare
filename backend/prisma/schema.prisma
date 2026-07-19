@@ -1,0 +1,54 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url = env("DATABASE_URL")
+}
+
+model User {
+    id String @id @default(uuid())
+    name String
+    email String @unique
+    password String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    customer Customer?
+}
+
+model Customer {
+    id String @id @default(uuid())
+    customerId String @unique
+    city String
+    contractType String
+    latestBillStatus String
+    chatBotEligible Boolean @default(true)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    userId String @unique
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    contracts Contract[]
+}
+
+enum ContractType {
+    FIXED
+    SPOT
+    VARIABLE
+}
+
+model Contract {
+    id String @id @default(uuid())
+    retailerName String 
+    contractType ContractType
+    pricePerKwh Decimal
+    monthlyFee Decimal @default(0)
+    startDate DateTime
+    endDate DateTime?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    customerId String
+    customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+}
